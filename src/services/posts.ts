@@ -1,9 +1,10 @@
-import { Post } from "../utils/models";
-import { PostQuery } from "../store/posts";
 import http from "./http";
 import axios, { AxiosRequestConfig } from "axios";
-import { PostData } from "@/utils/schema";
 import toast from "react-hot-toast";
+
+import { Post } from "../utils/models";
+import { PostData } from "../utils/schema";
+import { PostQuery } from "../store/posts";
 
 export interface PostResponse {
     posts: Post[]
