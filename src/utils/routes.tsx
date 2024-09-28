@@ -1,4 +1,4 @@
-import { RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router-dom";
 
 import Dashboard from "../pages/Dashboard";
 import ErrorPage from "../pages/ErrorPage";
@@ -27,6 +27,7 @@ const routes: RouteObject[] = [
             { path: 'logout', element: <Logout /> }
         ]
     },
+    { path: '*', element: <Navigate to='/' /> },
 ];
 
 export default routes;
