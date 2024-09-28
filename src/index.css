@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --default-font-family: "Space Grotesk", sans-serif;
+  --default-font-style: normal;
+}
+
+html {
+  font-family: var(--default-font-family);
+  font-style: var(--default-font-style);
+}
