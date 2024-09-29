@@ -12,6 +12,8 @@ const Elevation: React.FC<ElevationProps> = ({ children, isElevated, onClearElev
             const timeout = setTimeout(onClearElevation, 3_000);
             return () => clearTimeout(timeout);
         }
+
+    // eslint-disable-next-line 
     }, [isElevated]);
 
     if (isElevated) return (
