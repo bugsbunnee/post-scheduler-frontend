@@ -4,23 +4,24 @@ import { Box, Button, Flex, Grid, Heading, HStack, Stack, Text, Badge } from '@c
 import { BiGlasses, BiLogOut, BiPlusCircle } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 import { ACTIVE_SECTIONS } from '../utils/constants';
+import { Platform } from '../utils/models';
 
 import Content from '../components/Content';
 import DashboardOverview from '../components/DashboardOverview';
 import Elevation from '../components/Elevated';
 import NewPostModal from '../components/NewPostModal';
-import PlatformSelect from '../components/PlatformSelect';
 import PostsTable from '../components/PostsTable';
 import SearchInput from '../components/SearchInput';
+import Select from '../components/Select';
 
 import useAuthStore from '../store/auth';
 import usePostQueryStore from '../store/posts';
 
-const HomePage: React.FC = () => {
+const Home: React.FC = () => {
     const [activeSection, setActiveSection] = useState('');
 
     const { user } = useAuthStore();
-    const { postQuery, setPlatform } = usePostQueryStore();
+    const { postQuery, setPlatform, setSearchText } = usePostQueryStore();
 
     return ( 
         <>
@@ -55,17 +56,17 @@ const HomePage: React.FC = () => {
                     <Box mt={10}>
                         <Heading mb={8} textTransform='capitalize' color='black' fontSize='larger'>Shortcuts</Heading>
 
-                        <HStack color='blue' as={Button} p={0} onClick={() => setActiveSection(ACTIVE_SECTIONS.NEW_POST)} spacing={2} mb={4} fontSize='small' fontWeight='600'>
+                        <HStack color='blue' as={Button} variant='ghost' p={0} onClick={() => setActiveSection(ACTIVE_SECTIONS.NEW_POST)} spacing={2} mb={4} fontSize='small' fontWeight='600'>
                             <BiPlusCircle />
                             <Text>Create New Post</Text>
                         </HStack>
 
-                        <HStack as={Button} onClick={() => setActiveSection(ACTIVE_SECTIONS.VIEW_POSTS)} p={0} color='blue' spacing={2} mb={4} fontSize='small' fontWeight='600'>
+                        <HStack as={Button} variant='ghost' onClick={() => setActiveSection(ACTIVE_SECTIONS.VIEW_POSTS)} p={0} color='blue' spacing={2} mb={4} fontSize='small' fontWeight='600'>
                             <BiGlasses />
                             <Text>View all my posts</Text>
                         </HStack>
                         
-                        <HStack as={Button} onClick={() => setActiveSection(ACTIVE_SECTIONS.LOGOUT)} p={0} color='blue' spacing={2} mb={4} fontSize='small' fontWeight='600'>
+                        <HStack as={Button} variant='ghost' onClick={() => setActiveSection(ACTIVE_SECTIONS.LOGOUT)} p={0} color='blue' spacing={2} mb={4} fontSize='small' fontWeight='600'>
                             <BiLogOut />
                             <Text>Logout</Text>
                         </HStack>
@@ -76,8 +77,16 @@ const HomePage: React.FC = () => {
                     <DashboardOverview />
 
                     <Flex justify='end' align='center' my={10} gap={5}>
-                        <SearchInput />
-                        <PlatformSelect value={postQuery.platform} onChange={(platform) => setPlatform(platform)} />
+                        <SearchInput placeholder='Search Posts...' onChangeText={(text) => setSearchText(text)} />
+                        
+                        <Select
+                            isLoading={false}
+                            placeholder='Select platform'
+                            options={Object.values(Platform).map((platform) => ({ id: platform, name: platform }))} 
+                            value={postQuery.platform} 
+                            onChange={(platform) => setPlatform(platform)}
+                        />
+
                         <Elevation 
                             isElevated={activeSection === ACTIVE_SECTIONS.NEW_POST}
                             onClearElevation={() => setActiveSection('')}
@@ -102,4 +111,4 @@ const HomePage: React.FC = () => {
      );
 }
  
-export default HomePage;
+export default Home;

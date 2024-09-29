@@ -1,38 +1,38 @@
 import React from 'react';
 
-import { Flex, Select } from '@chakra-ui/react';
+import { Flex, Select as ChakraSelect, Spinner } from '@chakra-ui/react';
 import { BiCaretDown } from 'react-icons/bi';
-import { Platform } from '../utils/models';
 
 interface Props {
+    isLoading: boolean;
+    options: { id: string; name: string }[]
+    placeholder: string;
     value: string;
     onChange: (value: string) => void;
 }
 
-const PlatformSelect: React.FC<Props> = ({ value, onChange }) => {
-    const platforms = Object.values(Platform);
-
+const Select: React.FC<Props> = ({ isLoading, options, placeholder, value, onChange }) => {
     return ( 
         <Flex fontSize='small' gap={4} align='center'>
-            <Select 
-                icon={<BiCaretDown size={5} color='gray' />}
+            <ChakraSelect 
+                icon={isLoading ? <Spinner /> : <BiCaretDown size={5} color='gray' />}
                 variant='outline'
                 bg='white'
                 color='black'
                 borderColor='gray.200'
                 fontSize='small'
-                placeholder='Select platform' 
+                placeholder={placeholder} 
                 value={value} 
                 rounded={2}
                 onChange={(e) => onChange(e.target.value)}
                 _placeholder={{ color: 'gray.400' }}
             >
-                {platforms.map((platform) => (
-                    <option key={platform} value={platform}>{platform}</option>
+                {options.map((option) => (
+                    <option key={option.id} value={option.id}>{option.name}</option>
                 ))}
-            </Select>
+            </ChakraSelect>
         </Flex>
-     );
+    );
 };
  
-export default PlatformSelect;
+export default Select;

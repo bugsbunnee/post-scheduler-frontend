@@ -3,7 +3,9 @@ import React from 'react';
 import { HStack, Image, Skeleton, Spacer, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { formatDate } from '../utils/lib';
 
+import ApprovePost from './ApprovePost';
 import Conditional from './Conditional';
+import EmptyText from './Empty';
 import Error from './Error';
 import ExpandableText from './ExpandableText';
 import PlatformIcon from './PlatformIcon';
@@ -11,13 +13,15 @@ import PostStatusBadge from './PostStatusBadge';
 import PageSizeSelect from './PageSizeSelect';
 import Pagination from './Pagination';
 
+import useAuthStore from '../store/auth';
 import usePosts from '../hooks/usePosts';
 import usePostQueryStore from '../store/posts';
-import EmptyText from './Empty';
 
 const PostsTable: React.FC = () => {
+    const { user } = useAuthStore();
     const { data, error, isFetching } = usePosts();
-    const { setPageNumber } = usePostQueryStore();
+    const { postQuery, setPageNumber, setPageSize } = usePostQueryStore();
+    
 
     return ( 
        <>
@@ -34,6 +38,9 @@ const PostsTable: React.FC = () => {
                             <Th>overview</Th>
                             <Th>Status</Th>
                             <Th>Platform</Th>
+                            <Conditional isVisible={!!user && user.role === 'admin'}>
+                                <Th>Approve</Th>
+                            </Conditional>
                         </Tr>
                         </Thead>
                         <Tbody>
@@ -59,6 +66,11 @@ const PostsTable: React.FC = () => {
                                         <Td>
                                             <Skeleton className='w-full h-4' />
                                         </Td>
+                                        <Conditional isVisible={!!user && user.role === 'admin'}>
+                                            <Td>
+                                                <Skeleton className='w-full h-4' />
+                                            </Td>
+                                        </Conditional>
                                     </Tr>
                                 ))}
                             </Conditional>
@@ -90,6 +102,13 @@ const PostsTable: React.FC = () => {
                                         <Td>
                                             <PlatformIcon platform={post.platform} />
                                         </Td>
+                                        <Conditional isVisible={!!user && user.role === 'admin'}>
+                                            <Td>
+                                                <Conditional isVisible={post.status === 'pending'}>
+                                                    <ApprovePost postId={post._id} />
+                                                </Conditional>
+                                            </Td>
+                                        </Conditional>
                                     </Tr>
                                 ))}
                             </Conditional>
@@ -99,8 +118,13 @@ const PostsTable: React.FC = () => {
             </TableContainer>
             
             <HStack mt={6} p={4} className='bg-gray-100 border-t border-gray-300'>
-                <PageSizeSelect />
+                <PageSizeSelect
+                    value={postQuery.pageSize}
+                    onChange={(size) => setPageSize(size)}
+                />
+
                 <Spacer />
+                
                 <Pagination 
                     itemCount={data.pagination.total} 
                     pageSize={data.pagination.limit} 

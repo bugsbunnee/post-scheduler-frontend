@@ -2,19 +2,21 @@ import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 import { useCallback, useRef } from "react";
 import { BsSearch } from "react-icons/bs";
 
-import usePostQueryStore from "../store/posts";
+interface Props {
+  placeholder: string;
+  onChangeText: (text: string) => void;
+}
 
-const SearchInput = () => {
+const SearchInput: React.FC<Props> = ({ placeholder, onChangeText }) => {
   const ref = useRef<HTMLInputElement>(null);
-  const setSearchText = usePostQueryStore(s => s.setSearchText);
 
   const handleResetForm = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
     if (ref.current) {
-        setSearchText(ref.current.value);
+        onChangeText(ref.current.value);
     }
-  }, [setSearchText]);
+  }, []);
 
   return (
     <form onSubmit={handleResetForm}>
@@ -25,7 +27,7 @@ const SearchInput = () => {
             fontSize='small'
             color='black'
             borderRadius={20} 
-            placeholder='Search posts...' 
+            placeholder={placeholder}
             rounded={2} 
             bg='white' 
         />

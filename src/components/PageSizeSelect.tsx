@@ -1,12 +1,14 @@
 import React from 'react';
-import usePostQueryStore from '../store/posts';
 
 import { Flex, Select, Text } from '@chakra-ui/react';
 import { BiCaretDown } from 'react-icons/bi';
 
-const PageSizeSelect: React.FC = () => {
-    const { postQuery, setPageSize } = usePostQueryStore();
+interface Props {
+    value: number;
+    onChange: (pageSize: number) => void;
+}
 
+const PageSizeSelect: React.FC<Props> = ({ value, onChange }) => {
     return ( 
         <Flex color='gray.600' fontSize='small' fontWeight='600' gap={4} align='center'>
             <Text>Show</Text>
@@ -18,9 +20,9 @@ const PageSizeSelect: React.FC = () => {
                 className='max-w-20'
                 borderColor='gray.300'
                 placeholder='Select option' 
-                value={postQuery.pageSize} 
+                value={value} 
                 rounded={2}
-                onChange={(e) => setPageSize(parseInt(e.target.value))}
+                onChange={(e) => onChange(parseInt(e.target.value))}
             >
                 {[10, 30, 50, 80].map((option) => (
                     <option key={option} value={option}>{option}</option>

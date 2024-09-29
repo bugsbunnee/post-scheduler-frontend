@@ -11,9 +11,10 @@ import { BiCalendar } from 'react-icons/bi';
 import { PostData, postSchema } from '../utils/schema';
 import { createPost } from '../services/posts';
 import { formatDate, getCurrentDateString } from '../utils/lib';
+import { Platform } from '../utils/models';
 
 import ImageUpload from './ImageUpload';
-import PlatformSelect from './PlatformSelect';
+import Select from './Select';
 
 import usePostQueryStore from '../store/posts';
 
@@ -73,7 +74,13 @@ const NewPostModal = () => {
                                     <FormControl isInvalid={!!formState.errors.platform}>
                                         <FormLabel color='black' fontSize='small'>Platform:</FormLabel>
                                         
-                                        <PlatformSelect value={field.value} onChange={(platform) => field.onChange(platform)} />
+                                        <Select 
+                                            isLoading={false}
+                                            placeholder='Select platform'
+                                            options={Object.values(Platform).map((platform) => ({ id: platform, name: platform }))} 
+                                            value={field.value} 
+                                            onChange={(platform) => field.onChange(platform)} 
+                                        />
 
                                         {formState.errors.platform && <FormErrorMessage>{formState.errors.platform.message as string}</FormErrorMessage>}
                                     </FormControl>

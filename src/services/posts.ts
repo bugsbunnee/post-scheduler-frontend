@@ -55,3 +55,7 @@ export const createPost = async (post: PostData) => {
     }
    
 };
+
+export const approvePost = (postId: string) => {
+    return http.post(`/posts/${postId}/approve`);
+};

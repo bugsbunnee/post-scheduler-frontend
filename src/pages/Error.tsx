@@ -1,7 +1,7 @@
 import React from 'react';
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
 
-const ErrorPage: React.FC = () => {
+const Error: React.FC = () => {
     const error = useRouteError();
 
     return ( 
@@ -16,4 +16,4 @@ const ErrorPage: React.FC = () => {
     );
 }
  
-export default ErrorPage;
+export default Error;
