@@ -8,7 +8,7 @@ import useAuthStore from '../store/auth';
 
 const Dashboard: React.FC = () => {
     const authStore = useAuthStore();
-    if (!authStore.user) return <Navigate to='/login' />;
+    if (!authStore.user) return <Navigate to='/' />;
 
     const fullName = `${authStore.user.firstName} ${authStore.user.lastName}`;
 

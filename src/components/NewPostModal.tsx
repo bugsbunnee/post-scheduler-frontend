@@ -1,5 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 
 import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputLeftElement, Stack, Switch, Textarea, useDisclosure } from '@chakra-ui/react'
 import { PiPlus } from 'react-icons/pi';
@@ -14,7 +15,10 @@ import { formatDate, getCurrentDateString } from '../utils/lib';
 import ImageUpload from './ImageUpload';
 import PlatformSelect from './PlatformSelect';
 
+import usePostQueryStore from '../store/posts';
+
 const NewPostModal = () => {
+    const { setPageSize } = usePostQueryStore();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { control, register, formState, handleSubmit } = useForm<PostData>({
         resolver: zodResolver(postSchema),
@@ -25,7 +29,13 @@ const NewPostModal = () => {
   
     const handleCreatePost = async (data: PostData) => {
         await createPost(data);
+        
+        toast.success('Post created successfully!');
+        
         onClose();
+
+        // do this to trigger refetch
+        setPageSize(11);
     };
 
     return (

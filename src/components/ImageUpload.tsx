@@ -47,8 +47,8 @@ const ImageUpload: React.FC<Props> = ({ url, onUploadImage }) => {
   return (
     <>
         <IconButton 
-            isDisabled={!widgetRef.current}
-            isLoading={!isLoaded}
+            color='gray'
+            isLoading={!isLoaded || !widgetRef.current}
             size='lg'
             bg='gray.100'
             className="border border-gray-300"

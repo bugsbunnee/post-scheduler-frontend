@@ -14,6 +14,7 @@ const Content: React.FC<Props> = ({ children, title }) => {
                 <Heading fontSize='medium' color='black'>{title}</Heading>
                 <BiSolidFolder className='text-blue-600' size={20} />
             </HStack>
+            
             <Box bg='white'>
                 {children}
             </Box>

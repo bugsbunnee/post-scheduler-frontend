@@ -6,7 +6,7 @@ const Logout: React.FC = () => {
 
     useEffect(() => {
         logoutUser();
-        window.location.href = '/login';
+        window.location.href = '/';
     }, [logoutUser]);
 
     return null;

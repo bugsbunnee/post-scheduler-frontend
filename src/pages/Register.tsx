@@ -148,7 +148,7 @@ const Register: React.FC = () => {
 
                 </form>
                 <Box className='border-t border-gray-300 p-7 text-center' mt={4}>
-                    <Text className='text-black' fontSize='small' fontWeight='500'>Already a member? <ChakraLink as={Link} to='/login' color='blue.600'>Login to your account</ChakraLink></Text>
+                    <Text className='text-black' fontSize='small' fontWeight='500'>Already a member? <ChakraLink as={Link} to='/' color='blue.600'>Login to your account</ChakraLink></Text>
                 </Box>
             </Box>
         </Flex>

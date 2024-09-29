@@ -14,7 +14,7 @@ const routes: RouteObject[] = [
         element: <Layout />,
         errorElement: <ErrorPage />,
         children: [
-            { path: '/login', element: <Login />},
+            { index: true, element: <Login />},
             { path: '/register', element: <Register />},
         ]
     },
