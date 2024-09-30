@@ -8,12 +8,12 @@ import useCloudinaryLoaded from "../hooks/useCloudinaryLoaded";
 
 interface CloudinaryResult { 
     event: string; 
-    info: { public_id: string; secure_url: string; };
+    info: { public_id: string; secure_url: string; format: string };
 }
 
 interface Props {
     url: string;
-    onUploadImage: (url: string) => void;
+    onUploadImage: (info: CloudinaryResult['info']) => void;
 }
 
 const ImageUpload: React.FC<Props> = ({ url, onUploadImage }) => {
@@ -36,7 +36,7 @@ const ImageUpload: React.FC<Props> = ({ url, onUploadImage }) => {
             if (error) return toast.error(error.message);
      
             if (result && result.event === "success") {
-                onUploadImage(result.info.secure_url);
+                onUploadImage(result.info);
             }
         });
     }

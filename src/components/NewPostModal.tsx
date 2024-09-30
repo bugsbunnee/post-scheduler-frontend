@@ -60,7 +60,7 @@ const NewPostModal = () => {
                                     <FormControl isInvalid={!!formState.errors.media}>
                                         <FormLabel color='black' fontSize='small'>Picture:</FormLabel>
                                         
-                                        <ImageUpload url={field.value} onUploadImage={(image) => field.onChange(image)} />
+                                        <ImageUpload url={field.value} onUploadImage={(info) => field.onChange(info.secure_url)} />
 
                                         {formState.errors.media && <FormErrorMessage>{formState.errors.media.message}</FormErrorMessage>}
                                     </FormControl>

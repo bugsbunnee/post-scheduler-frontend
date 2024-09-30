@@ -14,7 +14,7 @@ import ImageUpload from './ImageUpload';
 
 const NewDocumentModal = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { control, formState, register, handleSubmit } = useForm<DocumentData>({
+    const { control, formState, register, handleSubmit, setValue } = useForm<DocumentData>({
         resolver: zodResolver(documentSchema),
         mode: 'all'
     });
@@ -50,9 +50,16 @@ const NewDocumentModal = () => {
                                     <FormControl isInvalid={!!formState.errors.url}>
                                         <FormLabel color='black' fontSize='small'>Document:</FormLabel>
                                         
-                                        <ImageUpload url='' onUploadImage={(image) => field.onChange(image)} />
+                                        <ImageUpload 
+                                            url='' 
+                                            onUploadImage={(info) => {
+                                                field.onChange(info.secure_url);
+                                                setValue('fileType', info.format as 'pdf');
+                                            }}
+                                        />
 
                                         {formState.errors.url && <FormErrorMessage>{formState.errors.url.message}</FormErrorMessage>}
+                                        {formState.errors.fileType && <FormErrorMessage>{formState.errors.fileType.message}</FormErrorMessage>}
                                     </FormControl>
                                 )}
                             />
