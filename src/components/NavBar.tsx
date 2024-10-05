@@ -1,9 +1,10 @@
 import React from 'react';
+import useAuthStore from '../store/auth';
 
 import { Box, Flex, Link as ChakraLink, Stack, Text } from '@chakra-ui/react';
 import { BiFile, BiSolidDashboard } from 'react-icons/bi';
 import { Link, Navigate } from 'react-router-dom';
-import useAuthStore from '@/store/auth';
+
 
 const routes = [
     {
