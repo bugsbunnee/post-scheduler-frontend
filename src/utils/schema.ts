@@ -31,8 +31,10 @@ export const postSchema = z.object({
 
 export const documentSchema = z.object({
     url: z.string().url(),
-    fileType: z.literal('pdf'),
-    fileName: z.string().min(3, 'File name must be at least 3 characters')
+    type: z.literal('pdf'),
+    documentNumber: z.string().min(3, 'Document number must be at least 3 characters'),
+    name: z.string().min(3, 'File name must be at least 3 characters'),
+    tags: z.array(z.string().min(1)).min(1)
 });
 
 export const documentQuestionSchema = z.object({

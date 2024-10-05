@@ -9,8 +9,11 @@ import { BiFile } from 'react-icons/bi';
 
 import { documentSchema, DocumentData } from '../utils/schema';
 import { uploadDocument } from '../services/documents';
+import { ENQUIRY_TAGS } from '../utils/constants';
+import { MultiSelectOption } from '../utils/models';
 
 import ImageUpload from './ImageUpload';
+import MultiSelect from './MultiSelect';
 
 const NewDocumentModal = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,7 +34,7 @@ const NewDocumentModal = () => {
 
     return (
       <>
-        <Button ref={btnRef} colorScheme='green' onClick={onOpen} fontSize='small' rounded={2} leftIcon={<PiPlus />}>
+        <Button ref={btnRef} bg='#D6E4FF' color='black' onClick={onOpen} fontSize='small' rounded={2} leftIcon={<PiPlus />}>
           Upload Document
         </Button>
 
@@ -54,27 +57,61 @@ const NewDocumentModal = () => {
                                             url='' 
                                             onUploadImage={(info) => {
                                                 field.onChange(info.secure_url);
-                                                setValue('fileType', info.format as 'pdf');
+                                                setValue('type', info.format as 'pdf');
                                             }}
                                         />
 
                                         {formState.errors.url && <FormErrorMessage>{formState.errors.url.message}</FormErrorMessage>}
-                                        {formState.errors.fileType && <FormErrorMessage>{formState.errors.fileType.message}</FormErrorMessage>}
+                                        {formState.errors.type && <FormErrorMessage>{formState.errors.type.message}</FormErrorMessage>}
                                     </FormControl>
                                 )}
                             />
 
-                            <FormControl mt={7} isInvalid={!!formState.errors.fileName}>
+                            <FormControl isInvalid={!!formState.errors.name}>
                                 <FormLabel color='black' fontSize='medium'>File Name:</FormLabel>
                                 <InputGroup variant='outline' borderColor='gray.200' size='lg' rounded={2}>
                                     <InputLeftElement pointerEvents='none'>
                                         <BiFile color='gray' />
                                     </InputLeftElement>
-                                    <Input placeholder='What would you like to save this file as?' _placeholder={{ fontSize: 'sm' }} color='black' fontSize='small' {...register('fileName')} />
+                                    <Input placeholder='What would you like to save this file as?' _placeholder={{ fontSize: 'sm' }} color='black' fontSize='small' {...register('name')} />
                                 </InputGroup>
 
-                                {formState.errors.fileName && <FormErrorMessage colorScheme='red'>{formState.errors.fileName.message}</FormErrorMessage> }
+                                {formState.errors.name && <FormErrorMessage colorScheme='red'>{formState.errors.name.message}</FormErrorMessage> }
                             </FormControl>
+                           
+                            <FormControl isInvalid={!!formState.errors.documentNumber}>
+                                <FormLabel color='black' fontSize='medium'>Document Number:</FormLabel>
+                                <InputGroup variant='outline' borderColor='gray.200' size='lg' rounded={2}>
+                                    <InputLeftElement pointerEvents='none'>
+                                        <BiFile color='gray' />
+                                    </InputLeftElement>
+                                    <Input placeholder='What would you like to save this file as?' _placeholder={{ fontSize: 'sm' }} color='black' fontSize='small' {...register('documentNumber')} />
+                                </InputGroup>
+
+                                {formState.errors.documentNumber && <FormErrorMessage colorScheme='red'>{formState.errors.documentNumber.message}</FormErrorMessage> }
+                            </FormControl>
+
+                            <Controller
+                                name='tags'
+                                control={control}
+                                render={({ field }) => {
+                                    console.log(field.value)
+                                    return (
+                                        <FormControl isInvalid={!!formState.errors.tags}>
+                                            <FormLabel color='black' fontSize='small'>Tags:</FormLabel>
+                                            
+                                            <MultiSelect
+                                                options={ENQUIRY_TAGS.map((tag) => ({ label: tag, value: tag }))}
+                                                value={field.value.map((text) => ({ label: text, value: text }))}
+                                                placeholder='Choose an item'
+                                                onChange={(options) => field.onChange(options.map((option) => (option as MultiSelectOption).value))}
+                                            />
+                                           
+                                            {formState.errors.tags && <FormErrorMessage>{formState.errors.tags.message}</FormErrorMessage>}
+                                        </FormControl>
+                                    )
+                                }}
+                            />
                         </Stack>
                     </DrawerBody>
                     <DrawerFooter>

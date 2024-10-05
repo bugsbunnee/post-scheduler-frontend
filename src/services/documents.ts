@@ -12,13 +12,25 @@ export interface DocumentEnquiry {
 
 export interface Document {
     _id: string;
-    fileName: string;
-    content: string;
-    enquiries: DocumentEnquiry[];
+    name: string;
+    createdAt: Date | string;
+    documentNumber: string;
+    lastInsertedVersion: string;
+    tags: string[];
+    history: { _id: string; version: number; content: string; url: string; }[]
+}
+
+export interface DocumentResponse {
+    totalDocuments: number;
+    topTags: { _id: string; count: number; }[];
 }
 
 export const getAllDocuments = () => {
-    return http.get<Pick<Document, '_id' | 'fileName'>[]>('/documents').then(response => response.data);
+    return http.get<Document[]>('/documents').then(response => response.data);
+};
+
+export const getDocumentsOverview = () => {
+    return http.get<DocumentResponse>('/documents/dashboard').then(response => response.data);
 };
 
 export const getDocumentDetails = (documentId: string) => {
@@ -27,7 +39,7 @@ export const getDocumentDetails = (documentId: string) => {
 
 export const uploadDocument = async (document: DocumentData) => {
     try {
-        await http.post('/documents', document);
+        await http.post('/documents/upload', document);
     } catch (error) {
         if (axios.isAxiosError(error)) toast.error(error.response?.data.message);
         else toast.error((error as Error).message);

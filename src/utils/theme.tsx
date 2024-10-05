@@ -3,7 +3,6 @@ import { createMultiStyleConfigHelpers, extendTheme, ThemeConfig } from '@chakra
 
 const { defineMultiStyleConfig } = createMultiStyleConfigHelpers(switchAnatomy.keys)
 
-
 const config: ThemeConfig = {
 	initialColorMode: 'dark',
 };
@@ -20,7 +19,9 @@ const switchTheme = defineMultiStyleConfig({
 });
 
 const theme = extendTheme({
-    components: { Switch: switchTheme },
+    components: { 
+		Switch: switchTheme,
+	},
 	config,
 	colors: {
 		gray: {

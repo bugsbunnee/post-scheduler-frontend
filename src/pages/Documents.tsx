@@ -1,53 +1,46 @@
 import React, { useState }  from 'react';
 
-import { Box, Button, Flex, Grid, Heading, HStack, Stack, Text } from '@chakra-ui/react';
-import { BiGlasses, BiPlusCircle } from 'react-icons/bi';
+import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Flex, Grid, Heading, HStack, Stack, Text } from '@chakra-ui/react';
+import { BiLogOut, BiPlusCircle } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
 import { ACTIVE_SECTIONS } from '../utils/constants';
 
 import Content from '../components/Content';
+import DocumentsTable from '../components/DocumentsTable';
+import DocumentsOverview from '../components/DocumentsOverview';
 import Elevation from '../components/Elevated';
-import Error from '../components/Error';
-import EmptyText from '../components/Empty';
 import NewDocumentModal from '../components/NewDocumentModal';
-import DocumentQuestionsTable from '../components/DocumentQuestionsTable';
-import Select from '../components/Select';
 import SearchInput from '../components/SearchInput';
 
-import useDocuments from '../hooks/useDocuments';
 import useDocumentQueryStore from '../store/documents';
 
 const Documents: React.FC = () => {
     const [activeSection, setActiveSection] = useState('');
 
-    const { documentQuery, setSelectedDocument, setSearchText } = useDocumentQueryStore();
-    const { isFetching, data, error } = useDocuments();
+    const { setSearchText } = useDocumentQueryStore();
 
     return ( 
         <>
-            <HStack justify='space-between' align='center'>
+            <HStack w="100%" justify='space-between' align='center'>
                 <Stack>
-                    <Heading color='black'>Uploaded Documents</Heading>
-                    <Text color='gray'>View documents you have uploaded</Text>
+                    <Heading color='black'>My Documents</Heading>
+
+                    <Breadcrumb fontSize='small' color='gray.500'>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href='#'>Home</BreadcrumbLink>
+                        </BreadcrumbItem>
+
+                        <BreadcrumbItem color='blackAlpha.700' isCurrentPage>
+                            <BreadcrumbLink href='#'>Documents</BreadcrumbLink>
+                        </BreadcrumbItem>
+                    </Breadcrumb>
                 </Stack>
 
                 <Flex justify='end' align='center' my={10} gap={5}>
                     <SearchInput 
-                        placeholder='Search Document Questions' 
+                        placeholder='Search Document' 
                         onChangeText={(text) => setSearchText(text)} 
                     />
-
-                    <Elevation 
-                        isElevated={activeSection === ACTIVE_SECTIONS.VIEW_QUESTIONS}
-                        onClearElevation={() => setActiveSection('')}
-                    >
-                        <Select 
-                            isLoading={isFetching}
-                            placeholder='Select Document'
-                            options={data.map((option) => ({ id: option._id, name: option.fileName }))} 
-                            value={documentQuery.selectedDocument} 
-                            onChange={(documentId) => setSelectedDocument(documentId)} 
-                        />
-                    </Elevation>
 
                     <Elevation 
                         isElevated={activeSection === ACTIVE_SECTIONS.NEW_DOCUMENT}
@@ -58,14 +51,13 @@ const Documents: React.FC = () => {
                 </Flex>
             </HStack>
 
-
-            <Grid  
-                gap={20}
+            <Grid
+                gap={10} 
                 templateAreas={{ base: `"main"`, lg: `"aside main"` }}
-                templateColumns={{ base: '1fr', lg: `12.5rem 1fr` }} 
+                templateColumns={{ base: '1fr', lg: '12.5rem minmax(0, 1fr)' }}
                 mt={10}
             >
-                <Box className='w-full'>
+                <Box>
                     <Box>
                         <Heading mb={8} textTransform='capitalize' color='black' fontSize='larger'>Shortcuts</Heading>
 
@@ -74,26 +66,23 @@ const Documents: React.FC = () => {
                             <Text>Upload New Document</Text>
                         </HStack>
 
-                        <HStack as={Button} variant='ghost' onClick={() => setActiveSection(ACTIVE_SECTIONS.VIEW_QUESTIONS)} p={0} color='blue' spacing={2} mb={4} fontSize='small' fontWeight='600'>
-                            <BiGlasses />
-                            <Text>View Document Questions</Text>
+                        <HStack as={Link} to='/dashboard/logout' onClick={() => setActiveSection(ACTIVE_SECTIONS.VIEW_QUESTIONS)} p={0} color='blue' spacing={2} mb={4} fontSize='small' fontWeight='600'>
+                            <BiLogOut />
+                            <Text>Logout</Text>
                         </HStack>
                     </Box>
                 </Box>
 
-                <Box>
-                    <Error error={error ? error.message : ''} />
-
-                    <Box>
+                <Box className='w-full'>
+                    <DocumentsOverview />
+                    
+                    <Box mt={12}>
                         <Elevation 
                             isElevated={activeSection === ACTIVE_SECTIONS.VIEW_QUESTIONS}
                             onClearElevation={() => setActiveSection('')}
                         >
-                            <Content title={documentQuery.selectedDocument ? 'Enquiries on ' + documentQuery.selectedDocument : 'Document Questions'}>
-                                {documentQuery.selectedDocument 
-                                    ? <DocumentQuestionsTable /> 
-                                    : <Box p={4}><EmptyText isVisible label='Select a document to view the questions...' /></Box>}
-                                
+                            <Content title='All Uploaded Documents'>
+                                <DocumentsTable />
                             </Content>
                         </Elevation>
                     </Box>

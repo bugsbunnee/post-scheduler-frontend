@@ -1,11 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDocumentDetails } from "../services/documents";
+import useDocumentQueryStore from "../store/documents";
 
-const useDocument = (documentId: string) => {
+const useDocument = () => {
+    const { documentQuery } = useDocumentQueryStore();
+
     return useQuery({
-        queryKey: ['documents', documentId],
-        queryFn: () => getDocumentDetails(documentId),
-        initialData: { _id: '', fileName: '', content: '', enquiries: []}
+        queryKey: ['documents', documentQuery.selectedDocument],
+        queryFn: () => getDocumentDetails(documentQuery.selectedDocument),
+        initialData: {
+            _id: '',
+            name: '',
+            createdAt: '',
+            documentNumber: '',
+            lastInsertedVersion: '',
+            tags: [],
+            history: []
+        }
     })
 };
 

@@ -6,6 +6,8 @@ import { Toaster } from 'react-hot-toast';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 
+import ChatBot from './components/Chat/ChatBot';
+
 import routes from './utils/routes';
 import theme from './utils/theme';
 
@@ -20,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <Toaster />
+        <ChatBot />
       </QueryClientProvider>
     </ChakraProvider>
   </StrictMode>,

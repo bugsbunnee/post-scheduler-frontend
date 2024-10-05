@@ -18,7 +18,7 @@ const PageSizeSelect: React.FC<Props> = ({ value, onChange }) => {
                 variant='outline'
                 bg='white'
                 className='max-w-20'
-                borderColor='gray.300'
+                borderColor='gray.200'
                 placeholder='Select option' 
                 value={value} 
                 rounded={2}

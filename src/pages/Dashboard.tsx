@@ -31,7 +31,7 @@ const Dashboard: React.FC = () => {
                 </GridItem>
             </Show>
 
-            <GridItem area="main" className='bg-gray-200 h-dvh' overflowY='scroll'>
+            <GridItem area="main" className='bg-gray-100 h-dvh' overflowY='scroll'>
                 <Flex bg='white' height='4rem' className='w-full px-8 border-b border-gray-300' align='center' justify='end'>
                     <Flex align='center' gap={3}>
                         <Avatar name={fullName} size='sm' />
@@ -47,7 +47,7 @@ const Dashboard: React.FC = () => {
                     </Flex>
                 </Flex>
 
-                <Box p={20} >
+                <Box py={20} px={40}>
                     <Outlet />
                 </Box>
 

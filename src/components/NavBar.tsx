@@ -20,7 +20,7 @@ const routes = [
 const NavBar: React.FC = () => {
 
     return ( 
-        <Box className='w-full bg-blue-600 h-dvh'>
+        <Box className='w-full bg-gradient-to-b from-blue-900 to-blue-400 h-dvh'>
             {routes.map((route) => (
                 <ChakraLink as={Link} key={route.label} color='white' className='hover:no-underline' to={route.route}>
                     <Stack align='center' justify='center' spacing={3} className='h-40 w-full hover:bg-blue-500 transition-all duration-300'>

@@ -23,3 +23,8 @@ export interface Post {
     status: Status;
     approver?: string;
 }
+
+export interface MultiSelectOption { 
+    label: string; 
+    value: string; 
+}
