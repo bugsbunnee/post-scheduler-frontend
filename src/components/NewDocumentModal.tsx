@@ -17,7 +17,7 @@ import MultiSelect from './MultiSelect';
 
 const NewDocumentModal = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { control, formState, register, handleSubmit, setValue } = useForm<DocumentData>({
+    const { control, formState, register, reset, handleSubmit, setValue } = useForm<DocumentData>({
         resolver: zodResolver(documentSchema),
         mode: 'all'
     });
@@ -30,6 +30,7 @@ const NewDocumentModal = () => {
         toast.success('Document created successfully!');
         
         onClose();
+        reset();
     };
 
     return (
@@ -95,14 +96,15 @@ const NewDocumentModal = () => {
                                 name='tags'
                                 control={control}
                                 render={({ field }) => {
-                                    console.log(field.value)
+                                    const value = field.value ?? [];
+
                                     return (
                                         <FormControl isInvalid={!!formState.errors.tags}>
                                             <FormLabel color='black' fontSize='small'>Tags:</FormLabel>
                                             
                                             <MultiSelect
                                                 options={ENQUIRY_TAGS.map((tag) => ({ label: tag, value: tag }))}
-                                                value={field.value.map((text) => ({ label: text, value: text }))}
+                                                value={value.map((text) => ({ label: text, value: text }))}
                                                 placeholder='Choose an item'
                                                 onChange={(options) => field.onChange(options.map((option) => (option as MultiSelectOption).value))}
                                             />
