@@ -12,6 +12,8 @@ const ChatBot: React.FC = () => {
     const [isOpen, setOpen] = useState(false);
     const [activeTab, setActiveTab] = useState(TAB_CATEGORIES.HOME);
 
+    return null;
+    
     return ( 
         <div className='fixed bottom-5 right-5 z-50'>
             <AnimatePresence>
