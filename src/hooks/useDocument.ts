@@ -6,12 +6,13 @@ const useDocument = () => {
     const { documentQuery } = useDocumentQueryStore();
 
     return useQuery({
-        queryKey: ['documents', documentQuery.selectedDocument],
-        queryFn: () => getDocumentDetails(documentQuery.selectedDocument),
+        queryKey: ['documents', documentQuery.selectedDocumentToView],
+        queryFn: () => getDocumentDetails(documentQuery.selectedDocumentToView),
         initialData: {
             _id: '',
             name: '',
             createdAt: '',
+            isAnalyzed: false,
             documentNumber: '',
             lastInsertedVersion: '',
             tags: [],

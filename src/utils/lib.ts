@@ -25,3 +25,7 @@ export const summarize = (text: string, limit: number = 30) => {
 
     return text.substring(0, limit) + '...';
 };
+
+export const getFileExtensionFromName = (fileName: string) => {
+    return fileName.split('.')[1];
+}

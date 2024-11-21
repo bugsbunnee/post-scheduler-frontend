@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 
 import { Badge, Button, HStack, Skeleton, Spacer, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { formatDate, paginate } from '../utils/lib';
+import { BiDotsHorizontal, BiPencil } from 'react-icons/bi';
 
 import Conditional from './Conditional';
 import DocumentHistory from './DocumentHistory';
@@ -9,13 +10,13 @@ import EmptyText from './Empty';
 import Error from './Error';
 import PageSizeSelect from './PageSizeSelect';
 import Pagination from './Pagination';
+import UpdateDocumentModal from './UpdateDocument';
 
 import useDocuments from '../hooks/useDocuments';
 import useDocumentQueryStore from '../store/documents';
-import { BiDotsHorizontal } from 'react-icons/bi';
 
 const DocumentsTable: React.FC = () => {
-    const { documentQuery, setPageNumber, setPageSize, setSelectedDocument } = useDocumentQueryStore();
+    const { documentQuery, setPageNumber, setPageSize, setSelectedDocumentToView, setSelectedDocumentToUpdate } = useDocumentQueryStore();
     const { data, error, isFetching } = useDocuments();
 
     const paginatedDocuments = useMemo(() => {
@@ -31,6 +32,8 @@ const DocumentsTable: React.FC = () => {
     return ( 
        <>
             <DocumentHistory />
+
+            <UpdateDocumentModal />
 
             <TableContainer p={4}>
                 <Error error={error ? error.message : ''} />
@@ -83,14 +86,26 @@ const DocumentsTable: React.FC = () => {
                                         {data.documentNumber}
                                     </Td>
                                     <Td className='max-w-20 text-wrap'>
-                                        <Badge fontSize='smaller' colorScheme='green'>
-                                            Analysed
-                                        </Badge>
+                                        {data.isAnalyzed ? (
+                                            <Badge fontSize='smaller' colorScheme='green'>
+                                                Analysed
+                                            </Badge>
+                                        ) : (
+                                            <Badge fontSize='smaller' colorScheme='orange'>
+                                                Pending
+                                            </Badge>
+                                        )}
+                                        
                                     </Td>
                                     <Td className='text-wrap'>
-                                        <Button bg='#D6E4FF' color='black' size='sm' fontWeight='400' fontSize='smaller' rounded={2} onClick={() => setSelectedDocument(data._id)}>
-                                            <BiDotsHorizontal />
-                                        </Button>
+                                        <HStack gap={2}>
+                                            <Button bg='#D6E4FF' color='black' size='sm' fontWeight='400' fontSize='smaller' rounded={2} onClick={() => setSelectedDocumentToView(data._id)}>
+                                                <BiDotsHorizontal />
+                                            </Button>
+                                            <Button bg='#000000' color='#FFFFFF' size='sm' fontWeight='400' fontSize='smaller' rounded={2} onClick={() => setSelectedDocumentToUpdate(data._id)}>
+                                                <BiPencil />
+                                            </Button>
+                                        </HStack>
                                     </Td>
                                 </Tr>
                             ))}

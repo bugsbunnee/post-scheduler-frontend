@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import toast from 'react-hot-toast';
 
 import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Stack, useDisclosure } from '@chakra-ui/react'
@@ -7,8 +7,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BiFile } from 'react-icons/bi';
 
-import { documentSchema, DocumentData } from '../utils/schema';
-import { uploadDocument } from '../services/documents';
+import { newDocumentSchema, DocumentData } from '../utils/schema';
+import { DocumentType, uploadDocument } from '../services/documents';
 import { ENQUIRY_TAGS } from '../utils/constants';
 import { MultiSelectOption } from '../utils/models';
 
@@ -18,19 +18,23 @@ import MultiSelect from './MultiSelect';
 const NewDocumentModal = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { control, formState, register, reset, handleSubmit, setValue } = useForm<DocumentData>({
-        resolver: zodResolver(documentSchema),
+        resolver: zodResolver(newDocumentSchema),
         mode: 'all'
     });
 
     const btnRef = React.useRef<HTMLButtonElement>(null);
   
+    const handleClose = useCallback(() => {
+        onClose();
+        reset();
+    }, [onClose, reset]);
+
     const handleUploadDocument = async (data: DocumentData) => {
         await uploadDocument(data)
         
         toast.success('Document created successfully!');
         
-        onClose();
-        reset();
+        handleClose();
     };
 
     return (
@@ -39,7 +43,7 @@ const NewDocumentModal = () => {
           Upload Document
         </Button>
 
-        <Drawer isOpen={isOpen} placement='right' onClose={onClose} finalFocusRef={btnRef}>
+        <Drawer isOpen={isOpen} placement='right' onClose={handleClose} finalFocusRef={btnRef}>
             <form onSubmit={handleSubmit(handleUploadDocument)}>
                 <DrawerOverlay />
                 <DrawerContent bg='white'>
@@ -55,10 +59,9 @@ const NewDocumentModal = () => {
                                         <FormLabel color='black' fontSize='small'>Document:</FormLabel>
                                         
                                         <ImageUpload 
-                                            url='' 
                                             onUploadImage={(info) => {
                                                 field.onChange(info.secure_url);
-                                                setValue('type', info.format as 'pdf');
+                                                setValue('type', info.format ? info.format : DocumentType.TXT);
                                             }}
                                         />
 
@@ -117,10 +120,13 @@ const NewDocumentModal = () => {
                         </Stack>
                     </DrawerBody>
                     <DrawerFooter>
-                    <Button rounded={2} textTransform='uppercase'  fontSize='small' colorScheme='blue' type='submit' isLoading={formState.isSubmitting}>Upload Document</Button>
-                    <Button ml={3} rounded={2} textTransform='uppercase'  fontSize='small' colorScheme='red' onClick={onClose}>
-                        Cancel
-                    </Button>
+                        <Button rounded={2} textTransform='uppercase'  fontSize='small' colorScheme='blue' type='submit' isLoading={formState.isSubmitting}>
+                            Upload Document
+                        </Button>
+
+                        <Button ml={3} rounded={2} textTransform='uppercase'  fontSize='small' colorScheme='red' onClick={handleClose}>
+                            Cancel
+                        </Button>
                     </DrawerFooter>
                 </DrawerContent>
             </form>

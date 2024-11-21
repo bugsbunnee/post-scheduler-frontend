@@ -7,7 +7,6 @@ import Layout from "../pages/Layout";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 import Register from "../pages/Register";
-import Documents from "../pages/Documents";
 
 const routes: RouteObject[] = [
     {
@@ -25,7 +24,6 @@ const routes: RouteObject[] = [
         errorElement: <Error />,
         children: [
             { index: true, element: <Home/> },
-            { path: 'documents', element: <Documents /> },
             { path: 'logout', element: <Logout /> }
         ]
     },

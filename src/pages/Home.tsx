@@ -1,107 +1,88 @@
 import React, { useState }  from 'react';
 
-import { Box, Button, Flex, Grid, Heading, HStack, Stack, Text, Badge } from '@chakra-ui/react';
-import { BiGlasses, BiLogOut, BiPlusCircle } from 'react-icons/bi';
+import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Flex, Grid, Heading, HStack, Stack, Text } from '@chakra-ui/react';
+import { BiLogOut, BiPlusCircle } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 import { ACTIVE_SECTIONS } from '../utils/constants';
-import { Platform } from '../utils/models';
 
 import Content from '../components/Content';
-import DashboardOverview from '../components/DashboardOverview';
+import DocumentsTable from '../components/DocumentsTable';
+import DocumentsOverview from '../components/DocumentsOverview';
 import Elevation from '../components/Elevated';
-import NewPostModal from '../components/NewPostModal';
-import PostsTable from '../components/PostsTable';
+import NewDocumentModal from '../components/NewDocumentModal';
 import SearchInput from '../components/SearchInput';
-import Select from '../components/Select';
 
-import useAuthStore from '../store/auth';
-import usePostQueryStore from '../store/posts';
+import useDocumentQueryStore from '../store/documents';
 
 const Home: React.FC = () => {
     const [activeSection, setActiveSection] = useState('');
 
-    const { user } = useAuthStore();
-    const { postQuery, setPlatform, setSearchText } = usePostQueryStore();
+    const { setSearchText } = useDocumentQueryStore();
 
     return ( 
         <>
-            <Stack>
-                <Heading color='black'>My Dashboard</Heading>
-                <Text color='gray'>Welcome, {user?.firstName} {user?.lastName}</Text>
-            </Stack>
+            <HStack w="100%" justify='space-between' align='center'>
+                <Stack>
+                    <Heading color='black'>My Documents</Heading>
 
-            <Grid  
-                gap={20}
-                templateAreas={{ base: `"main"`, lg: `"aside main"` }}
-                templateColumns={{ base: '1fr', lg: `12.5rem 1fr` }} 
-                mt={10}
-            >
-                <Box className='w-full'>
+                    <Breadcrumb fontSize='small' color='gray.500'>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href='#'>Home</BreadcrumbLink>
+                        </BreadcrumbItem>
+
+                        <BreadcrumbItem color='blackAlpha.700' isCurrentPage>
+                            <BreadcrumbLink href='#'>Documents</BreadcrumbLink>
+                        </BreadcrumbItem>
+                    </Breadcrumb>
+                </Stack>
+
+                <Flex justify='end' align='center' my={10} gap={5}>
+                    <SearchInput 
+                        placeholder='Search Document' 
+                        onChangeText={(text) => setSearchText(text)} 
+                    />
+
                     <Elevation 
-                        isElevated={activeSection === ACTIVE_SECTIONS.LOGOUT}
+                        isElevated={activeSection === ACTIVE_SECTIONS.NEW_DOCUMENT}
                         onClearElevation={() => setActiveSection('')}
                     >
-                        <Stack bg='white' className='border border-gray-300 rounded-sm min-h-40' p={5}>
-                            <Heading textTransform='capitalize' color='black' fontSize='larger'>{user?.firstName} {user?.lastName}</Heading>
-                            <Box mt={2} mb={6}>
-                                <Badge textTransform='capitalize' colorScheme='green' mb={2} fontSize='small'>{user?.role}</Badge>
-                                <Text color='gray' fontSize='small'>{user?.email}</Text>
-                            </Box>
-                            <Button as={Link} to='/dashboard/logout' colorScheme='red' rounded={2} fontSize='small' size='sm'>
-                                Logout
-                            </Button>
-                        </Stack>
+                        <NewDocumentModal />
                     </Elevation>
+                </Flex>
+            </HStack>
 
-                    <Box mt={10}>
+            <Grid
+                gap={10} 
+                templateAreas={{ base: `"main"`, lg: `"aside main"` }}
+                templateColumns={{ base: '1fr', lg: '12.5rem minmax(0, 1fr)' }}
+                mt={10}
+            >
+                <Box>
+                    <Box>
                         <Heading mb={8} textTransform='capitalize' color='black' fontSize='larger'>Shortcuts</Heading>
 
-                        <HStack color='blue' as={Button} variant='ghost' p={0} onClick={() => setActiveSection(ACTIVE_SECTIONS.NEW_POST)} spacing={2} mb={4} fontSize='small' fontWeight='600'>
+                        <HStack color='blue' as={Button} variant='ghost' p={0} onClick={() => setActiveSection(ACTIVE_SECTIONS.NEW_DOCUMENT)} spacing={2} mb={4} fontSize='small' fontWeight='600'>
                             <BiPlusCircle />
-                            <Text>Create New Post</Text>
+                            <Text>Upload New Document</Text>
                         </HStack>
 
-                        <HStack as={Button} variant='ghost' onClick={() => setActiveSection(ACTIVE_SECTIONS.VIEW_POSTS)} p={0} color='blue' spacing={2} mb={4} fontSize='small' fontWeight='600'>
-                            <BiGlasses />
-                            <Text>View all my posts</Text>
-                        </HStack>
-                        
-                        <HStack as={Button} variant='ghost' onClick={() => setActiveSection(ACTIVE_SECTIONS.LOGOUT)} p={0} color='blue' spacing={2} mb={4} fontSize='small' fontWeight='600'>
+                        <HStack as={Link} to='/dashboard/logout' onClick={() => setActiveSection(ACTIVE_SECTIONS.VIEW_QUESTIONS)} p={0} color='blue' spacing={2} mb={4} fontSize='small' fontWeight='600'>
                             <BiLogOut />
                             <Text>Logout</Text>
                         </HStack>
                     </Box>
                 </Box>
 
-                <Box>
-                    <DashboardOverview />
-
-                    <Flex justify='end' align='center' my={10} gap={5}>
-                        <SearchInput placeholder='Search Posts...' onChangeText={(text) => setSearchText(text)} />
-                        
-                        <Select
-                            isLoading={false}
-                            placeholder='Select platform'
-                            options={Object.values(Platform).map((platform) => ({ id: platform, name: platform }))} 
-                            value={postQuery.platform} 
-                            onChange={(platform) => setPlatform(platform)}
-                        />
-
+                <Box className='w-full'>
+                    <DocumentsOverview />
+                    
+                    <Box mt={12}>
                         <Elevation 
-                            isElevated={activeSection === ACTIVE_SECTIONS.NEW_POST}
+                            isElevated={activeSection === ACTIVE_SECTIONS.VIEW_QUESTIONS}
                             onClearElevation={() => setActiveSection('')}
                         >
-                            <NewPostModal />
-                        </Elevation>
-                    </Flex>
-
-                    <Box>
-                        <Elevation 
-                            isElevated={activeSection === ACTIVE_SECTIONS.VIEW_POSTS}
-                            onClearElevation={() => setActiveSection('')}
-                        >
-                            <Content title='My Posts'>
-                                <PostsTable />
+                            <Content title='All Uploaded Documents'>
+                                <DocumentsTable />
                             </Content>
                         </Elevation>
                     </Box>

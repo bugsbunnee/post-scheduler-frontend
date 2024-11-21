@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 
 import { Badge, Button, HStack, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SimpleGrid, Skeleton, Spacer, Table, Tag, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
-import { BiDotsHorizontal, BiInfoCircle } from 'react-icons/bi';
+import { BiInfoCircle } from 'react-icons/bi';
 
 import { paginate } from '../utils/lib';
+import { DocumentType } from '../services/documents';
 
 import useDocument from '../hooks/useDocument';
 import useDocumentQueryStore from '../store/documents';
 
 import Conditional from './Conditional';
 import Error from './Error';
-import ExpandableText from './ExpandableText';
 import PageSizeSelect from './PageSizeSelect';
 import Pagination from './Pagination';
 
@@ -19,7 +19,7 @@ const DocumentHistory: React.FC = () => {
     const [currentPage, setCurrentpage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
 
-    const { documentQuery, setSelectedDocument } = useDocumentQueryStore();
+    const { documentQuery, setSelectedDocumentToView: setSelectedDocument } = useDocumentQueryStore();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { data, isFetching, error } = useDocument();
 
@@ -34,10 +34,10 @@ const DocumentHistory: React.FC = () => {
     }, [data.history, currentPage, pageSize]);
 
     useEffect(() => {
-        if (documentQuery.selectedDocument) onOpen();
-    }, [documentQuery.selectedDocument, onOpen]);
+        if (documentQuery.selectedDocumentToView) onOpen();
+    }, [documentQuery.selectedDocumentToView, onOpen]);
 
-    if (!documentQuery.selectedDocument) return null;
+    if (!documentQuery.selectedDocumentToView) return null;
     
     return (
         <>
@@ -74,8 +74,8 @@ const DocumentHistory: React.FC = () => {
                             <Thead>
                                 <Tr>
                                     <Th fontSize='smaller'>Version</Th>
-                                    <Th fontSize='smaller'>Content</Th>
-                                    <Th fontSize='smaller'><BiDotsHorizontal /></Th>
+                                    <Th fontSize='smaller'>Type</Th>
+                                    <Th fontSize='smaller'>URL</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -102,9 +102,9 @@ const DocumentHistory: React.FC = () => {
                                                 {data.version}
                                             </Td>
                                             <Td> 
-                                                <ExpandableText>
-                                                    {data.content}
-                                                </ExpandableText>
+                                                <Badge fontSize='smaller' textTransform='uppercase' colorScheme={data.type === DocumentType.PDF ? 'orange' : 'blue'}>
+                                                    {data.type}
+                                                </Badge>
                                             </Td>
                                             <Td className='max-w-20 text-wrap'>
                                                 <Link href={data.url} target='_blank' rel='noopenner noreferrer'>

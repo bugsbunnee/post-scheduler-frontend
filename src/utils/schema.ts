@@ -1,7 +1,9 @@
-import { z } from 'zod';
-import { Platform } from './models';
-
 import dayjs from 'dayjs';
+import { z } from 'zod';
+
+import { Platform } from './models';
+import { DocumentType } from '../services/documents';
+
 
 export const authSchema = z.object({
     email: z.string().email(),
@@ -29,12 +31,17 @@ export const postSchema = z.object({
     useAI: z.boolean().default(false),
 });
 
-export const documentSchema = z.object({
+export const newDocumentSchema = z.object({
     url: z.string().url(),
-    type: z.literal('pdf'),
+    type: z.enum([DocumentType.PDF, DocumentType.TXT]),
     documentNumber: z.string().min(3, 'Document number must be at least 3 characters'),
     name: z.string().min(3, 'File name must be at least 3 characters'),
     tags: z.array(z.string().min(1)).min(1)
+});
+
+export const updateDocumentSchema = z.object({
+    url: z.string().url(),
+    type: z.enum([DocumentType.PDF, DocumentType.TXT]),
 });
 
 export const documentQuestionSchema = z.object({
@@ -42,7 +49,8 @@ export const documentQuestionSchema = z.object({
 });
 
 export type AuthData = z.infer<typeof authSchema>;
-export type DocumentData = z.infer<typeof documentSchema>;
+export type DocumentData = z.infer<typeof newDocumentSchema>;
+export type UpdatedDocumentData = Pick<DocumentData, 'url' | 'type'>;
 export type DocumentQuestionData = z.infer<typeof documentQuestionSchema>;
 export type PostData = z.infer<typeof postSchema>;
 export type RegisterData = z.infer<typeof registerSchema>;

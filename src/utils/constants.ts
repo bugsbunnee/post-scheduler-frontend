@@ -89,3 +89,5 @@ export const DB_SECTIONS = [
         body: 'All you need to know about locating any of our stores nationwide',
     },
 ];
+
+export const IMAGE_TYPES = ['jpg', 'jpeg', 'png'];

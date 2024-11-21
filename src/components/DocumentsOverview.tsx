@@ -24,12 +24,12 @@ const DocumentsOverview: React.FC = () => {
         {
             Icon: MdComputer,
             label: 'Analysed Documents',
-            value: data.totalDocuments,
+            value: data.analysedDocuments,
         },
         {
             Icon: MdQueue,
             label: 'Pending Documents',
-            value: 0,
+            value: data.notAnalysedDocuments,
         },
         {
             Icon: MdTag,

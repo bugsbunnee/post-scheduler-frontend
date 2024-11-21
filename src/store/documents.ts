@@ -4,7 +4,8 @@ export interface DocumentQuery {
     pageNumber: number;
     pageSize: number;
     searchText: string;
-    selectedDocument: string;
+    selectedDocumentToView: string;
+    selectedDocumentToUpdate: string;
 }
 
 export interface DocumentQueryStore {
@@ -12,7 +13,8 @@ export interface DocumentQueryStore {
   setSearchText: (searchText: string) => void;
   setPageNumber: (pageNumber: number) => void;
   setPageSize: (pageSize: number) => void;
-  setSelectedDocument: (documentId: string) => void;
+  setSelectedDocumentToView: (documentId: string) => void;
+  setSelectedDocumentToUpdate: (documentId: string) => void;
 }
 
 const useDocumentQueryStore = create<DocumentQueryStore>((set) => ({
@@ -20,9 +22,11 @@ const useDocumentQueryStore = create<DocumentQueryStore>((set) => ({
         pageNumber: 1,
         pageSize: 10,
         searchText: '',
-        selectedDocument: '',
+        selectedDocumentToView: '',
+        selectedDocumentToUpdate: '',
     },
-    setSelectedDocument: (documentId) => set((store) => ({ documentQuery: { ...store.documentQuery, selectedDocument: documentId, pageNumber: 1 }})),
+    setSelectedDocumentToView: (documentId) => set((store) => ({ documentQuery: { ...store.documentQuery, selectedDocumentToView: documentId, pageNumber: 1 }})),
+    setSelectedDocumentToUpdate: (documentId) => set((store) => ({ documentQuery: { ...store.documentQuery, selectedDocumentToUpdate: documentId, pageNumber: 1 }})),
     setSearchText: (searchText) => set((store) => ({ documentQuery: { ...store.documentQuery, searchText, pageNumber: 1 } })),
     setPageNumber: (pageNumber) => set((store) => ({ documentQuery: { ...store.documentQuery, pageNumber }})),
     setPageSize: (pageSize) => set((store) => ({ documentQuery: { ...store.documentQuery, pageSize }})),

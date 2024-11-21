@@ -6,6 +6,8 @@ const useDocumentsOverview = () => {
         queryKey: ['documents-overview'],
         queryFn: () => getDocumentsOverview(),
         initialData: {
+            analysedDocuments: 0,
+            notAnalysedDocuments: 0,
             totalDocuments: 0,
             topTags: []
         }
