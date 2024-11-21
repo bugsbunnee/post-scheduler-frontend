@@ -12,7 +12,7 @@ interface AuthResponse {
 
 export const login = async (data: AuthData) => {
     try {
-        const response = await http.post<AuthResponse>('/auth/login', data);
+        const response = await http.post<AuthResponse>('/auth/login/admin', data);
         return response.data.token;
     } catch (error) {
         if (axios.isAxiosError(error)) toast.error(error.response?.data.message);
